@@ -223,6 +223,13 @@ def health_check():
     return jsonify({'status': 'healthy', 'ocr_ready': True})
 
 if __name__ == '__main__':
+    import socket
+    def find_free_port():
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.bind(('', 0))
+            return s.getsockname()[1]
+    
+    port = int(os.environ.get('PORT', find_free_port()))
     print("Starting Photo-to-Form OCR Application...")
-    print("Access the application at: http://localhost:5000")
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    print(f"Access the application at: http://localhost:{port}")
+    app.run(debug=True, host='0.0.0.0', port=port)
